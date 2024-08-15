@@ -134,8 +134,8 @@ function createTable() {
   // Create table header
   const headerRow = document.createElement('tr');
   const headers = [
-    'domen', 'domen short name', 'trecker', 'RT GNF', 'esp name',
-    'send type', 'product name', 'action', 'link'
+    'Domen', 'Domen short name', 'Tracking', 'RT GNF', 'ESP name',
+    'Type', 'Product info', 'Copy', 'Link'
   ];
   headers.forEach(header => {
     const th = document.createElement('th');
