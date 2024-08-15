@@ -14,6 +14,27 @@
         h1 {
             text-align: center;
             color: #333;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
+        .instructions {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .instructions ul {
+            padding-left: 20px;
+        }
+
+        .instructions li {
+            margin-bottom: 10px;
         }
 
         #table-container {
@@ -84,16 +105,21 @@
 </head>
 <body>
 
-<h1>
-    Не забудьте ввести свій код маркетолога в поле marketer ID
-</h1>
-<h2>
-    В поле domen, send type , product name можно скопіювати одразу за раз з mastersheet, не треба копіювати кожeн рядок
-    порядку
-</h2>
-<h2>
-    При оновленні сторінки ВСІ поля скидуються
-</h2>
+<h1>Як працювати</h1>
+<div class="instructions">
+    <ol>
+        <li>Ввести свій код маркетолога в поле marketer ID</li>
+        <li>Скопіювати значення для domen, send type, product name з mastersheet (можна скопіювати всі 10 за один
+            раз)
+        </li>
+        <li>Заповнити інші поля вручну</li>
+        <li>Натиснути "Generate Links"</li>
+        <li>Натиснути "Copy link" в рядку з потрібним посиланням</li>
+        <li>Вставити посилання в адресну строку і перевірити, що немає помилок</li>
+    </ol>
+    <p><strong>Будь обережний при оновленні сторінки: ВСІ заповнені поля скидаються.</strong></p>
+</div>
+
 <div class="container">
 
     <label for="marketer_id">Marketer ID:</label>
