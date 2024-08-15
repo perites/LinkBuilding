@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create links</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        #table-container {
+            margin: 0 auto;
+            max-width: 1200px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin: 5px 0;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .action-buttons {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<h1>
+    Не забудьте ввести свій код маркетолога в поле marketer ID
+</h1>
+<h2>
+    В поле domen, send type , product name можно скопіювати одразу за раз з mastersheet, не треба копіювати кожeн рядок
+    порядку
+</h2>
+<h2>
+    При оновленні сторінки ВСІ поля скидуються
+</h2>
+<div class="container">
+
+    <label for="marketer_id">Marketer ID:</label>
+    <input type="text" id="marketer_id" placeholder="Enter marketer ID">
+    <div class="action-buttons">
+        <button id="generate-links">Generate Links</button>
+    </div>
+
+    <div id="table-container"></div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
