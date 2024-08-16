@@ -25,6 +25,8 @@ function adjustColumnWidths() {
   }
 }
 
+
+
 function handlePaste(event) {
   event.preventDefault();
   let paste = (event.clipboardData || window.clipboardData).getData('text');
@@ -35,7 +37,7 @@ function handlePaste(event) {
   const rowIndex = Array.from(inputField.parentElement.parentElement.parentElement.children).indexOf(inputField.parentElement.parentElement) + 1; // Get the row index
 
   values.forEach((value, index) => {
-    let row = document.getElementById(`row${rowIndex + index}-col${colIndex}`);
+    let row = document.getElementById(`row${rowIndex + index}-col${colIndex-2}`);
     if (row) {
       row.value = value.trim();
     }
@@ -50,6 +52,21 @@ function updateLinks() {
 
 
     let marketer_id = document.getElementById(`marketer_id`).value;
+    if (!marketer_id){
+      const messageElement = document.getElementById('copyMessage');
+        messageElement.textContent = `Marketer ID не вказано`
+                messageElement.style.display = 'block';
+                old_color = messageElement.style.background
+                messageElement.style.background = "red"
+
+                // Hide the message after 3 seconds
+                setTimeout(() => {
+                    messageElement.style.display = 'none'
+                    messageElement.style.background = old_color
+                }, 3000);
+      return
+    }
+
     const ESP_MAIL_TAGS = {
     "Infusionsoft": "~Contact.Email~",
     "Getresponse": "[[email]]",
@@ -94,10 +111,11 @@ SEND_TYPES = ['F', 'B', 'BE', 'OF']
     }
 
 
+
     let product_info = document.getElementById(`row${i}-col7`).value.trim();
 
 
-    str_link = `https://${trecker}/${rtgnf}?email=${mail_tag}&domain=${marketer_id}${domen_short_name}&type=${send_type}&product=${product_info}`;
+    str_link = `https://${trecker}/${rtgnf}?email=${mail_tag}&domain=${marketer_id || "MARKETER_ID_NOT_SPECIFIED"}${domen_short_name}&type=${send_type}&product=${product_info}`;
 
 
      linkInput.value = str_link;
@@ -106,14 +124,31 @@ SEND_TYPES = ['F', 'B', 'BE', 'OF']
      console.log(`link for row ${i} created`)
 
   }
+  const messageElement = document.getElementById('copyMessage');
+        messageElement.textContent = `Links created`
+                messageElement.style.display = 'block';
+
+                // Hide the message after 3 seconds
+                setTimeout(() => {
+                    messageElement.style.display = 'none';
+                }, 3000);
 }
 
 // Function to copy the link from a specific row's "Link" column
 function copyLink(rowNumber) {
+
   let linkInput = document.getElementById(`row${rowNumber}-link`);
   if (linkInput && linkInput.value) {
     navigator.clipboard.writeText(linkInput.value)
       .then(() => {
+        const messageElement = document.getElementById('copyMessage');
+        messageElement.textContent = `Link from row ${rowNumber} copied to clipboard`
+                messageElement.style.display = 'block';
+
+                // Hide the message after 3 seconds
+                setTimeout(() => {
+                    messageElement.style.display = 'none';
+                }, 3000);
         console.log("Link copied");
       })
       .catch(err => {
@@ -122,7 +157,39 @@ function copyLink(rowNumber) {
   }
 }
 
+function copyALLLinks (){
 
+let allLinks = ""
+for (let i = 1; i <= 10; i++) {
+    
+
+
+    let link_str = document.getElementById(`row${i}-link`).value.trim();
+    allLinks = allLinks+ "\n" + link_str
+
+
+
+  
+
+  }
+
+navigator.clipboard.writeText(allLinks)
+      .then(() => {
+        const messageElement = document.getElementById('copyMessage');
+        messageElement.textContent = `All links copied to clipboard`
+                messageElement.style.display = 'block';
+
+                // Hide the message after 3 seconds
+                setTimeout(() => {
+                    messageElement.style.display = 'none';
+                }, 3000);
+        console.log("All Links copied");
+      })
+      .catch(err => {
+        console.error('Failed to copy: ', err);
+      });
+
+}
 
 // Function to create and populate the table
 function createTable() {
@@ -133,9 +200,10 @@ function createTable() {
 
   // Create table header
   const headerRow = document.createElement('tr');
-  const headers = [
+  const headers = [ "#",
+  'Copy', 
     'Domen', 'Domen short name', 'Tracking', 'RT GNF', 'ESP name',
-    'Type', 'Product info', 'Copy', 'Link'
+    'Type', 'Product info',  'Link'
   ];
   headers.forEach(header => {
     const th = document.createElement('th');
@@ -147,14 +215,12 @@ function createTable() {
   // Create table rows and cells
   for (let row = 1; row <= 10; row++) {
     const tr = document.createElement('tr');
-    for (let col = 1; col <= 7; col++) {
-      const td = document.createElement('td');
-      const input = document.createElement('input');
-      input.type = 'text';
-      input.id = `row${row}-col${col}`;
-      td.appendChild(input);
-      tr.appendChild(td);
-    }
+
+    const numberTd = document.createElement('td');
+    numberTd.textContent  = row
+    tr.appendChild(numberTd);
+
+
     // Add Action column with Copy Link button
     const actionTd = document.createElement('td');
     const copyButton = document.createElement('button');
@@ -163,7 +229,18 @@ function createTable() {
     actionTd.appendChild(copyButton);
     tr.appendChild(actionTd);
 
-    tbody.appendChild(tr);
+
+    for (let col = 1; col <= 7; col++) {
+      const td = document.createElement('td');
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.id = `row${row}-col${col}`;
+      td.appendChild(input);
+      tr.appendChild(td);
+    }
+    
+
+    
 
 
     // Add Link column
@@ -174,6 +251,9 @@ function createTable() {
     linkInput.readOnly = true;
     linkTd.appendChild(linkInput);
     tr.appendChild(linkTd);
+
+
+    tbody.appendChild(tr);
 
 
   }
@@ -201,6 +281,10 @@ window.onload = () => {
   // Ensure the button event listener is added after the table is created
   document.getElementById('generate-links').addEventListener('click', () => {
     updateLinks(); // Update the links before generating
+  });
+
+  document.getElementById('copy-all').addEventListener('click', () => {
+    copyALLLinks(); // Update the links before generating
   });
 
   // Attach input event listeners to all input fields

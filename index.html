@@ -9,6 +9,8 @@
             font-family: Arial, sans-serif;
             margin: 20px;
             background-color: #f4f4f4;
+            justify-content: center;
+            align-items: center;
         }
 
         h1 {
@@ -75,8 +77,8 @@
             border-radius: 4px;
         }
 
-        button {
-            background-color: blue;
+       button {
+            background-color: #5457ff;
             color: white;
             border: none;
             padding: 10px;
@@ -98,9 +100,65 @@
             margin: 0 auto;
         }
 
-        .action-buttons {
+        .action-buttons button{
             text-align: center;
+            background-color: #5457ff;
+    color: white;
+    border: none;
+    padding: 15px 30px;  /* Increase padding to make the button larger */
+    text-align: center;
+    text-decoration: none;
+    display: block;  /* Stack buttons vertically */
+    font-size: 18px;  /* Increase font size */
+    margin: 10px auto;  /* Center buttons with vertical spacing */
+    cursor: pointer;
+    border-radius: 4px;
+    width: 200px;  /* Make buttons wider */
         }
+
+#marketer-id-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;  /* Ensures the label is centered */
+}
+#marketer-id-container label {
+    font-size: 18px;  /* Makes the label bigger */
+    font-weight: bold;  /* Optionally make the text bold */
+    display: inline-block;  /* Keeps the label inline with the input */
+    margin-bottom: 10px;  /* Adds space between the label and input */
+}
+
+#marketer-id-container input {
+    width: 300px;  /* Set a specific width for the input field */
+    padding: 10px;  /* Add some padding to make the input field bigger */
+    border: 1px solid #ccc;  /* Add a border to the input field */
+    border-radius: 4px;  /* Round the corners of the input field */
+    box-sizing: border-box;  /* Ensure padding doesn't affect the width */
+}
+
+
+
+.bubble-message {
+    position: fixed;  /* Keep the bubble fixed on the page */
+    top: 20px;  /* Adjust the vertical position */
+    left: 50%;  /* Center horizontally */
+    transform: translateX(-50%);  /* Proper centering by moving it back by 50% of its own width */
+    background-color: #af1ee8;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-weight: bold;
+    text-align: center;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    font-size: 18px;
+    max-width: 400px;
+    z-index: 1000;  /* Ensure the bubble appears above other content */
+}
+
+
+
     </style>
 </head>
 <body>
@@ -114,23 +172,30 @@
         </li>
         <li>Заповнити інші поля вручну</li>
         <li>Натиснути "Generate Links"</li>
-        <li>Натиснути "Copy link" в рядку з потрібним посиланням</li>
+        <li>Натиснути "Copy link" в рядку з потрібним посиланням або "Copy All Links"</li>
         <li>Вставити посилання в адресну строку і перевірити, що немає помилок</li>
     </ol>
     <p><strong>Будь обережний при оновленні сторінки: ВСІ заповнені поля скидаються.</strong></p>
 </div>
 
 <div class="container">
-
+    <div id='marketer-id-container'>
     <label for="marketer_id">Marketer ID:</label>
     <input type="text" id="marketer_id" placeholder="Enter marketer ID">
-    <div class="action-buttons">
-        <button id="generate-links">Generate Links</button>
+     
     </div>
+       <div class="action-buttons">
+        <button id="generate-links">Generate Links</button>
+        <button id="copy-all" >Copy All Links</button>
+    </div>
+
+<p class="bubble-message" id="copyMessage" style="display: none; color: white;"></p>
+
 
     <div id="table-container"></div>
 
 </div>
+
 
 <script src="script.js"></script>
 
