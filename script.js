@@ -99,9 +99,11 @@ const handlePaste = (event) => {
     const rowIndex = Array.from(inputField.parentElement.parentElement.parentElement.children).indexOf(inputField.parentElement.parentElement) + 1;
 
     values.forEach((value, index) => {
-        const row = document.getElementById(`row${rowIndex + index}-col${colIndex-2}`);
+        const id = `row${rowIndex + index}-col${colIndex-2}`
+        const row = document.getElementById(id);
         if (row) {
             row.value = value.trim();
+            sessionStorage.setItem(id, value.trim());
         }
     });
 
@@ -185,8 +187,14 @@ const createTable = () => {
             const td = document.createElement('td');
             const input = document.createElement('input');
             input.type = 'text';
-            input.id = `row${row}-col${col}`;
+            const id = `row${row}-col${col}`;
+            input.id = id
             input.addEventListener("paste", handlePaste);
+
+            input.value = sessionStorage.getItem(id) || "";
+            input.addEventListener("input", function() {
+                sessionStorage.setItem(id, input.value);
+            });
 
             td.appendChild(input);
             tr.appendChild(td);
@@ -208,12 +216,22 @@ const createTable = () => {
     table.appendChild(thead);
     table.appendChild(tbody);
     tableContainer.appendChild(table);
+
+    adjustColumnWidths()
 }
 
+const setUpMarketerInput = () =>{
+    marketerInput = document.getElementById('marketer_id')
+    marketerInput.value = sessionStorage.getItem("marketer_id") || "";
+    marketerInput.addEventListener('input', () => {
+        sessionStorage.setItem('marketer_id', marketerInput.value);
+    });
+}
 
 
 window.onload = () => {
     createTable();
+    setUpMarketerInput()
 
     document.getElementById('generate-links').addEventListener('click', () => {
         updateLinks();

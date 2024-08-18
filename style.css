@@ -34,6 +34,9 @@ h1 {
 .instructions li {
     margin-bottom: 10px;
 }
+.instructions p {
+    text-align: center;
+}
 
 #table-container {
     margin: 0 auto;
