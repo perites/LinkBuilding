@@ -20,7 +20,8 @@
         <li>Натиснути "Copy link" в рядку з потрібним посиланням або "Copy All Links"</li>
         <li>Вставити посилання в адресну строку і перевірити, що немає помилок</li>
     </ol>
-    <p><strong>Будьте обережні, при закритті сторінки (або браузеру) всі заповнені поля скидаються.</strong></p>
+    <p><strong>Поля не скидаються при оновленні або закритті вкладки, якщо вам потрібно скинути значення, натисніть
+        "Clear All Fields", що очистіть ВСІ поля в таблиці.</strong></p>
 </div>
 
 <div class="container">
@@ -30,8 +31,15 @@
     </div>
 
     <div class="action-buttons">
-        <button id="generate-links">Generate Links</button>
-        <button id="copy-all">Copy All Links</button>
+        <div>
+            <button id="generate-links">Generate Links</button>
+        </div>
+        <div>
+            <button id="copy-all">Copy All Links</button>
+        </div>
+        <div class="reset-all">
+            <button id="reset-all">Clear All Fields</button>
+        </div>
     </div>
 
     <p class="bubble-message" id="infoMessage" style="display: none; color: white;"></p>

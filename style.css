@@ -103,7 +103,7 @@ button:hover {
 
 .action-buttons {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     margin-bottom: 10px;
 }
 
@@ -125,6 +125,13 @@ button:hover {
 }
 .action-buttons button:hover{
     background-color: #3333AD;
+}
+
+.reset-all button{
+    background-color:#ff4f4f;
+}
+.reset-all button:hover{
+    background-color:red;
 }
 
 #marketer-id-container {

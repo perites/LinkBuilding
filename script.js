@@ -1,3 +1,5 @@
+const defaultMessageColor = "#76BF57"
+
 const COLUMNS = 10;
 const ROWS_AMOUNT = 10;
 
@@ -52,7 +54,6 @@ const adjustColumnWidths = () => {
 const displayMessage = (message, color=null) => {
     const messageElement = document.getElementById('infoMessage');
     messageElement.textContent = message
-    const oldColor = messageElement.style.background
     if (color) {
         messageElement.style.background = color
     }
@@ -60,7 +61,7 @@ const displayMessage = (message, color=null) => {
 
     setTimeout(() => {
         messageElement.style.display = 'none';
-        messageElement.style.background = oldColor
+        messageElement.style.background = defaultMessageColor
     }, 3000);
 }
 
@@ -103,7 +104,7 @@ const handlePaste = (event) => {
         const row = document.getElementById(id);
         if (row) {
             row.value = value.trim();
-            sessionStorage.setItem(id, value.trim());
+            localStorage.setItem(id, value.trim());
         }
     });
 
@@ -191,9 +192,9 @@ const createTable = () => {
             input.id = id
             input.addEventListener("paste", handlePaste);
 
-            input.value = sessionStorage.getItem(id) || "";
+            input.value = localStorage.getItem(id) || "";
             input.addEventListener("input", function() {
-                sessionStorage.setItem(id, input.value);
+                localStorage.setItem(id, input.value);
             });
 
             td.appendChild(input);
@@ -222,12 +223,23 @@ const createTable = () => {
 
 const setUpMarketerInput = () =>{
     marketerInput = document.getElementById('marketer_id')
-    marketerInput.value = sessionStorage.getItem("marketer_id") || "";
+    marketerInput.value = localStorage.getItem("marketer_id") || "";
     marketerInput.addEventListener('input', () => {
-        sessionStorage.setItem('marketer_id', marketerInput.value);
+        localStorage.setItem('marketer_id', marketerInput.value);
     });
 }
 
+const resetAll = () => {
+    const userConfirmed = confirm('Ви точно хочете очистити всі поля в таблиці?');
+    if (userConfirmed) {
+        const inputs = document.querySelectorAll('#table-container input');
+    inputs.forEach(input => {
+          input.value = "";
+          localStorage.setItem(input.id, "");
+      });
+    displayMessage("All fields have been cleared", "#fcce26")
+      }
+}
 
 window.onload = () => {
     createTable();
@@ -236,7 +248,9 @@ window.onload = () => {
     document.getElementById('generate-links').addEventListener('click', () => {
         updateLinks();
     });
-
+    document.getElementById('reset-all').addEventListener('click', () => {
+        resetAll();
+    });
     document.getElementById('copy-all').addEventListener('click', () => {
         copyALLLinks();
     });
