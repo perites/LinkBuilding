@@ -44,12 +44,11 @@ const adjustColumnWidths = () => {
         rows.forEach((row) => {
             const inputField = row.querySelector(`td:nth-child(${col}) input`);
             if (inputField) {
-                inputField.style.width = maxWidth + 'px';
+                inputField.style.width = (maxWidth + 20) + 'px';
             }
         });
     }
 }
-
 
 const displayMessage = (message, color=null) => {
     const messageElement = document.getElementById('infoMessage');
@@ -85,8 +84,10 @@ const copyALLLinks = () => {
         const link = getLinkFromRow(i)
         allLinks += link + "\n"
     }
-    navigator.clipboard.writeText(allLinks)
-    displayMessage(`All links copied to clipboard`)
+    if (allLinks != ("\n"*10)){
+        navigator.clipboard.writeText(allLinks)
+        displayMessage(`All links copied to clipboard`)
+    }
 }
 
 
@@ -239,6 +240,8 @@ const resetAll = () => {
       });
     displayMessage("All fields have been cleared", "#fcce26")
       }
+
+     adjustColumnWidths();
 }
 
 window.onload = () => {

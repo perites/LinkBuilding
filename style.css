@@ -77,11 +77,10 @@ tr:nth-child(even) {
 
 input {
     font-size: 18px;
-    width: 100px;
     padding: 8px;
     box-sizing: border-box;
     border: 1px solid #B8B8B8;
-    border-radius: 4px;
+    border-radius: 5px;
 }
 
 button {
