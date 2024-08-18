@@ -183,6 +183,7 @@ const createTable = () => {
         copyButton.textContent = 'Copy Link';
         copyButton.addEventListener('click', () => copyLink(row));
         actionTd.appendChild(copyButton);
+        actionTd.style = "min-width: 100px;"
         tr.appendChild(actionTd);
 
         for (let col = 1; col <= 7; col++) {
