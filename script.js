@@ -1,6 +1,6 @@
 const defaultMessageColor = "#76BF57"
 
-const COLUMNS = 10;
+const COLUMNS = 12;
 const ROWS_AMOUNT = 10;
 
 const ESP_MAIL_TAGS = {
@@ -26,7 +26,9 @@ const ESP_MAIL_TAGS = {
 }
 const SEND_TYPES = ['F', 'B', 'BE', 'OF']
 
-
+const getValueFromColumn = (rowNumber, columnNumber) => {
+    return document.getElementById(`row${rowNumber}-col${columnNumber}`).value.trim();
+}
 
 const adjustColumnWidths = () => {
     const rows = document.querySelectorAll('tbody tr');
@@ -65,7 +67,7 @@ const displayMessage = (message, color=null) => {
 }
 
 
-const getLinkFromRow = (rowNumber ) => {
+const getLinkFromRow = (rowNumber) => {
     return document.getElementById(`row${rowNumber}-link`).value;
 }
 
@@ -76,13 +78,25 @@ const copyLink = (rowNumber) => {
     navigator.clipboard.writeText(link)
     displayMessage(`Link from row ${rowNumber} copied`)
 }
+const getUnsubLinkFromRow = (rowNumber) => {
+    return document.getElementById(`row${rowNumber}-unsub-link`).value;
+}
 
+
+const copyUnsubLink = (rowNumber) => {
+    const link = getUnsubLinkFromRow(rowNumber)
+    if (!link) return
+    navigator.clipboard.writeText(link)
+    displayMessage(`Unsub Link from row ${rowNumber} copied`, "#f57e47")
+}
 
 const copyALLLinks = () => {
     let allLinks = ""
     for (let i = 1; i <= ROWS_AMOUNT; i++) {
         const link = getLinkFromRow(i)
-        allLinks += link + "\n"
+        const unsubLink = getUnsubLinkFromRow(i)
+
+        allLinks +=`Row: ${i} Product: ${getValueFromColumn(i,8)}` + "\n" +"link : " + link + "\n" + "unsub: " + unsubLink + "\n\n" 
     }
     if (allLinks != ("\n"*10)){
         navigator.clipboard.writeText(allLinks)
@@ -113,9 +127,7 @@ const handlePaste = (event) => {
 }
 
 
-const getValueFromColumn = (rowNumber, columnNumber) => {
-    return document.getElementById(`row${rowNumber}-col${columnNumber}`).value.trim();
-}
+
 
 
 const updateLinks = () => {
@@ -127,18 +139,22 @@ const updateLinks = () => {
 
     for (let i = 1; i <= ROWS_AMOUNT; i++) {
         const linkInput = document.getElementById(`row${i}-link`);
+        const unsubLinkInput = document.getElementById(`row${i}-unsub-link`);
 
-        const domen = getValueFromColumn(i, 1)
-        const domenShortName = getValueFromColumn(i, 2)
-        const tracking = getValueFromColumn(i, 3)
-        const rtgnf = getValueFromColumn(i, 4)
-        const ESPName = getValueFromColumn(i, 5)
+        const domen = getValueFromColumn(i, 1) || "NO_DOMEN"
+        const domenShortName = getValueFromColumn(i, 2) || "NO_SHORT_NAME"
+        const tracking = getValueFromColumn(i, 3) || "NO_TRACKING"
+        const rtgnf = getValueFromColumn(i, 4) || "NO_RTGNF"
+        const unsubRtgnf = getValueFromColumn(i, 5) || "NO_UNSUB_RTGNF"
+
+        const ESPName = getValueFromColumn(i, 6)
         const mailTag = ESP_MAIL_TAGS[ESPName] || "WRONG_ESP_NAME";
-        const sendType = getValueFromColumn(i, 6)
+        const sendType = getValueFromColumn(i, 7) || "NO_TYPE"
         if (!SEND_TYPES.includes(sendType)) {
             send_type = "WRONG_SEND_TYPE";
         }
-        const productInfo = getValueFromColumn(i, 7)
+        const productInfo = getValueFromColumn(i, 8) || "NO_PRODUCT_INFO"
+
 
 
         link = `https://${tracking}/${rtgnf}?email=${mailTag}&domain=${marketerID}${domenShortName}&type=${sendType}&product=${productInfo}`;
@@ -147,6 +163,11 @@ const updateLinks = () => {
         console.log(link)
         console.log(`link for row ${i} created`)
 
+        unsubLink = `https://${tracking}/${unsubRtgnf}?email=unsub`;
+        unsubLinkInput.value = unsubLink;
+
+        console.log(unsubLink)
+        console.log(`unsub link for row ${i} created`)
     }
 
     adjustColumnWidths()
@@ -162,8 +183,8 @@ const createTable = () => {
 
     const headerRow = document.createElement('tr');
     const headers = [ "#",'Copy',
-                      'Domen', 'Domen short name', 'Tracking', 'RT GNF', 'ESP name','Type', 'Product info',
-                      'Link'];
+                      'Domen', 'Domen short name', 'Tracking', 'RT GNF',"UNSUB RT GNF", 'ESP name','Type', 'Product info',
+                      'Link', "Unsub Link"];
     headers.forEach((header) => {
         const th = document.createElement('th');
         th.textContent = header;
@@ -179,14 +200,22 @@ const createTable = () => {
         tr.appendChild(numberTd);
 
         const actionTd = document.createElement('td');
+        
         const copyButton = document.createElement('button');
         copyButton.textContent = 'Copy Link';
         copyButton.addEventListener('click', () => copyLink(row));
+        
+        const copyButton2 = document.createElement('button'); 
+        copyButton2.textContent = 'Copy Unsub Link';        
+        copyButton2.addEventListener('click', () => copyUnsubLink(row));
+        copyButton2.classList.add('copy-unsub');
+
         actionTd.appendChild(copyButton);
-        actionTd.style = "min-width: 100px;"
+        actionTd.appendChild(copyButton2);
+        actionTd.style = "min-width: 150px;"
         tr.appendChild(actionTd);
 
-        for (let col = 1; col <= 7; col++) {
+        for (let col = 1; col <= 8; col++) {
             const td = document.createElement('td');
             const input = document.createElement('input');
             input.type = 'text';
@@ -199,6 +228,10 @@ const createTable = () => {
                 localStorage.setItem(id, input.value);
             });
 
+            if (col == 5){
+                input.placeholder="UNSUB"
+            }
+
             td.appendChild(input);
             tr.appendChild(td);
         }
@@ -210,6 +243,14 @@ const createTable = () => {
         linkInput.readOnly = true;
         linkTd.appendChild(linkInput);
         tr.appendChild(linkTd);
+
+        const unsubLinkTd = document.createElement('td');
+        const unsubLinkInput = document.createElement('input');
+        unsubLinkInput.type = 'text';
+        unsubLinkInput.id = `row${row}-unsub-link`;
+        unsubLinkInput.readOnly = true;
+        unsubLinkTd.appendChild(unsubLinkInput);
+        tr.appendChild(unsubLinkTd);
 
 
         tbody.appendChild(tr);

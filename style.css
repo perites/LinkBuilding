@@ -99,6 +99,14 @@ button:hover {
     background-color: #3333AD;
 }
 
+.copy-unsub{
+    background-color: #f57e47;
+}
+.copy-unsub:hover{
+    background-color: #ff641c;
+}
+
+
 .action-buttons {
     display: flex;
     justify-content: space-between;
